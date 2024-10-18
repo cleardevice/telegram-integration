@@ -481,6 +481,8 @@ func (s *Service) sendError(b *bot.Bot, chatID int64, err error) {
 }
 
 func formatContent(content string, contentEntities []models.MessageEntity) string {
+	slog.Info("content", slog.Any("content", content))                 // todo remove
+	slog.Info("content", slog.Any("contentEntities", contentEntities)) // todo remove
 	contentRunes := utf16.Encode([]rune(content))
 
 	var sb strings.Builder
@@ -498,6 +500,8 @@ func formatContent(content string, contentEntities []models.MessageEntity) strin
 			continue
 		}
 
+		slog.Info("ent", slog.Any("ent", "==="))  // todo remove
+		slog.Info("ent", slog.Any("ent", entity)) // todo remove
 		if entity.Offset >= prevEntity.Offset+prevEntity.Length {
 			sb.WriteString(entityContent)
 			sb.WriteString(string(utf16.Decode(contentRunes[prevEntity.Offset+prevEntity.Length : entity.Offset])))
@@ -507,6 +511,7 @@ func formatContent(content string, contentEntities []models.MessageEntity) strin
 				continue
 			}
 		}
+		slog.Info("ent", slog.Any("content", entityContent)) // todo remove
 
 		matches := re.FindStringSubmatch(entityContent)
 		switch entity.Type {
